@@ -1,0 +1,80 @@
+documentclass[a4paper,12pt]{article}
+
+% Настройка русского языка и шрифтов
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+% Библиотеки для красивой математики и нумерации формул
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% Настройка полей страницы
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{center}
+    \large\bfseries Численное моделирование одномерного уравнения переноса
+\end{center}
+
+\vspace{0.5cm}
+
+В данной работе рассматривается программная реализация трех разностных схем для решения линейного уравнения переноса первого порядка (уравнения конвекции):
+\begin{equation*}
+    \frac{\partial u}{\partial t} + c \frac{\partial u}{\partial x} = 0
+\end{equation*}
+
+В качестве тестового начального условия $u(0, x) = f(x)$ используется Гауссова функция. Эта задача является линейной и имеет решение $u(x, t) = g(x - ct), t > 0$.
+
+\section{Реализованные разностные схемы}
+
+Ниже приведены математические аппроксимации схем, взятые из учебника \textit{В. Зализняка «Основы вычислительной физики. Часть 1. Введение в конечно-разностные методы» Глава 3}:
+
+\subsection{Схема 3.3}
+Схемы устойчивы только при выполнении условия Куранта-Фридрикса-Леви: $K = \frac{c \cdot \tau}{h} \le 1$.
+\begin{itemize}
+    \item[] {Разностное уравнение (в исходном виде):}
+    \begin{equation*}
+        \frac{u_{n}^{k+1} - u_{n}^{k}}{\tau} + c \frac{u_{n}^{k} - u_{n-1}^{k}}{h} = 0
+    \end{equation*}
+    
+    \item[] {Расчетная формула в коде (\texttt{dif\_scheme\_1}):}
+    \begin{equation*}
+        u_{n}^{k+1} = u_{n}^{k} - K \cdot (u_{n}^{k} - u_{n-1}^{k})
+    \end{equation*}
+\end{itemize}
+
+\subsection{Схема 3.5}
+
+\begin{itemize}
+    \item[] {Разностное уравнение (в исходном виде):}
+    \begin{equation*}
+        \frac{u_{n}^{k+1} - u_{n}^{k}}{\tau} + c \frac{u_{n}^{k+1} - u_{n-1}^{k+1}}{h} = 0
+    \end{equation*}
+    
+    \item[] {Расчетная формула в коде (\texttt{dif\_scheme\_2}):}
+    \begin{equation*}
+        u_{n}^{k+1} = \frac{u_{n}^{k} + K \cdot u_{n-1}^{k+1}}{1 + K}
+    \end{equation*}
+\end{itemize}
+
+\subsection{Схема 3.6}
+Поскольку при $c > 0$ её шаблон направлен против потока, схема является  неустойчивой.
+
+\begin{itemize}
+    \item[] {Разностное уравнение (в исходном виде):}
+    \begin{equation*}
+        \frac{u_{n}^{k+1} - u_{n}^{k}}{\tau} - c \frac{u_{n+1}^{k} - u_{n}^{k}}{h} = 0
+    \end{equation*}
+    
+    \item[] {Расчетная формула в коде (\texttt{dif\_scheme\_3}):}
+    \begin{equation*}
+        u_{n}^{k+1} = u_{n}^{k} - K \cdot (u_{n+1}^{k} - u_{n}^{k})
+    \end{equation*}
+\end{itemize}
+
+\end{document}
