@@ -13,9 +13,6 @@ print(f"tau = {tau}, h = {h}, c = {c}")
 X = np.linspace(a_h, b_h, N_h)
 T = np.linspace(a_t, b_t, N_t)
 
-def u(k, n):
-    pass
-
 def f(x):# буду использывать Гауссовую функцию
     a = 1
     b = -20
